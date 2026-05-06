@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "tag": "Promo Terbatas",
+    "title": "Traktir Ultah: Diskon s.d 90% + Bebas Ongkir!",
+    "description": "Nikmati berbagai promo eksklusif hari ini tanpa minimal belanja.",
+    "bgClass": "bg-gradient-to-r from-green-500 to-emerald-600",
+    "iconName": "GiftIcon"
+  },
+  {
+    "id": 2,
+    "tag": "Elektronik Fair",
+    "title": "Ganti Gadget Baru? Cicilan 0% Selamanya!",
+    "description": "Dapatkan cashback hingga 2 Juta Rupiah untuk produk pilihan.",
+    "bgClass": "bg-gradient-to-r from-blue-500 to-indigo-600",
+    "iconName": "SparklesIcon"
+  },
+  {
+    "id": 3,
+    "tag": "Fashion Sale",
+    "title": "Gaya Sultan Harga Teman! Koleksi Terbaru.",
+    "description": "Koleksi brand lokal terbaik dengan diskon tambahan pengguna baru.",
+    "bgClass": "bg-gradient-to-r from-orange-500 to-red-600",
+    "iconName": "TicketIcon"
+  }
+]

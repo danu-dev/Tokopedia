@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "Logitech G Pro X Superlight Wireless",
+    "price": 2100000,
+    "location": "Jakarta Barat",
+    "rating": 4.9,
+    "sold": 2500,
+    "category": "Gadget",
+    "image": "https://picsum.photos/400/400?random=1"
+  },
+  {
+    "id": 2,
+    "title": "Monitor LG 24GN600 UltraGear 144Hz",
+    "price": 2450000,
+    "location": "Tangerang",
+    "rating": 5.0,
+    "sold": 800,
+    "category": "Komputer",
+    "image": "https://picsum.photos/400/400?random=2"
+  },
+  {
+    "id": 3,
+    "title": "Keychron K2 Mechanical Keyboard",
+    "price": 1250000,
+    "location": "Jakarta Pusat",
+    "rating": 4.8,
+    "sold": 1200,
+    "category": "Komputer",
+    "image": "https://picsum.photos/400/400?random=3"
+  }
+]
