@@ -6,18 +6,18 @@
     <div class="relative aspect-square overflow-hidden bg-gray-100">
       <img :src="image" :alt="title" class="h-full w-full object-cover" />
       <button
-        class="absolute top-3 right-3 z-10 rounded-full bg-white/80 p-2 shadow-sm backdrop-blur-md transition-all active:scale-90"
+        class="absolute right-3 top-3 z-10 rounded-full bg-white/80 p-2 shadow-sm backdrop-blur-md transition-all active:scale-90"
         @click.stop="toggleWishlist"
       >
         <HeartIcon :class="['h-5 w-5 transition-colors', isWishlisted ? 'fill-current text-red-500' : 'text-gray-400']" />
       </button>
     </div>
 
-    <div class="p-4 flex flex-col flex-1">
+    <div class="flex flex-1 flex-col p-4">
       <h3 class="mb-1 line-clamp-2 text-sm leading-snug text-gray-700">{{ title }}</h3>
       <p class="mb-3 text-base font-bold text-gray-900">Rp{{ price.toLocaleString('id-ID') }}</p>
 
-      <div class="mt-auto mb-4 flex flex-col gap-1">
+      <div class="mb-4 mt-auto flex flex-col gap-1">
         <div class="flex items-center text-[11px] text-gray-400">
           <MapPinIcon class="mr-1 h-3 w-3" />
           <span>{{ location }}</span>
@@ -41,15 +41,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { HeartIcon, MapPinIcon, StarIcon } from '@heroicons/vue/24/solid'
+import { store } from '../../store'
 
-defineProps(['title', 'price', 'image', 'location', 'rating', 'sold'])
+const props = defineProps(['id', 'title', 'price', 'image', 'location', 'rating', 'sold', 'category'])
 const emit = defineEmits(['add-to-cart', 'open-detail'])
 
-const isWishlisted = ref(false)
+const isWishlisted = computed(() => store.isInWishlist(props.id))
 
 const toggleWishlist = () => {
-  isWishlisted.value = !isWishlisted.value
+  store.toggleWishlist({
+    id: props.id,
+    title: props.title,
+    price: props.price,
+    image: props.image,
+    location: props.location,
+    rating: props.rating,
+    sold: props.sold,
+    category: props.category
+  })
 }
 </script>

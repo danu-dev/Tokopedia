@@ -2,7 +2,7 @@
   <div class="mx-auto max-w-5xl px-4 py-10">
     <h1 class="mb-8 text-2xl font-black text-gray-900">Checkout</h1>
 
-    <div v-if="cart.length > 0" class="flex flex-col gap-8 lg:flex-row">
+    <div v-if="store.cart.length > 0" class="flex flex-col gap-8 lg:flex-row">
       <div class="flex-1 space-y-6">
         <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
           <h3 class="mb-4 flex items-center gap-2 font-bold text-gray-800">
@@ -14,9 +14,7 @@
             <p class="mt-1 text-sm text-gray-500">0812-3456-7890</p>
             <p class="text-sm text-gray-500">Jl. Teknologi Raya No. 404, Kota Coding, Jawa Tengah</p>
           </div>
-          <button
-            class="mt-4 rounded-lg border border-green-600 px-4 py-2 text-xs font-bold text-green-600 transition-all hover:bg-green-50"
-          >
+          <button class="mt-4 rounded-lg border border-green-600 px-4 py-2 text-xs font-bold text-green-600 transition-all hover:bg-green-50">
             Pilih Alamat Lain
           </button>
         </div>
@@ -24,13 +22,11 @@
         <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
           <h3 class="mb-4 font-bold text-gray-800">Pesanan Kamu</h3>
           <div class="space-y-6">
-            <div v-for="item in cart" :key="item.id" class="flex gap-4">
+            <div v-for="item in store.cart" :key="item.id" class="flex gap-4">
               <img :src="item.image" :alt="item.title" class="h-16 w-16 rounded-xl object-cover" />
               <div class="flex-1">
                 <h4 class="line-clamp-1 text-sm font-bold text-gray-800">{{ item.title }}</h4>
-                <p class="text-xs text-gray-500">
-                  {{ item.quantity }} barang x Rp{{ item.price.toLocaleString('id-ID') }}
-                </p>
+                <p class="text-xs text-gray-500">{{ item.quantity }} barang x Rp{{ item.price.toLocaleString('id-ID') }}</p>
               </div>
               <p class="font-bold text-gray-900">Rp{{ (item.price * item.quantity).toLocaleString('id-ID') }}</p>
             </div>
@@ -75,10 +71,7 @@
     <div v-else class="rounded-3xl border border-dashed border-gray-200 bg-white py-20 text-center">
       <h2 class="text-xl font-black text-gray-900">Keranjang Kosong</h2>
       <p class="mt-2 text-sm text-gray-500">Tambahkan produk dulu sebelum checkout.</p>
-      <RouterLink
-        to="/"
-        class="mt-6 inline-block rounded-xl bg-[#00AA5B] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#009650]"
-      >
+      <RouterLink to="/" class="mt-6 inline-block rounded-xl bg-[#00AA5B] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#009650]">
         Belanja Sekarang
       </RouterLink>
     </div>
@@ -91,7 +84,7 @@
         <h2 class="mb-2 text-2xl font-black text-gray-900">Pembayaran Berhasil!</h2>
         <p class="mb-8 text-gray-500">Horee! Pesananmu sedang disiapkan dan akan segera dikirim.</p>
         <AppButton variant="primary" class="w-full" @click="finishCheckout">
-          Kembali Berbelanja
+          Lihat Daftar Transaksi
         </AppButton>
       </div>
     </div>
@@ -102,29 +95,23 @@
 import { computed, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { CheckBadgeIcon, MapPinIcon } from '@heroicons/vue/24/solid'
+import { store } from '../store'
 import AppButton from '../components/ui/AppButton.vue'
 
-const props = defineProps({
-  cart: {
-    type: Array,
-    default: () => []
-  }
-})
-
-const emit = defineEmits(['clear-cart'])
 const router = useRouter()
 const isPaid = ref(false)
 
-const totalItems = computed(() => props.cart.reduce((sum, item) => sum + item.quantity, 0))
-const totalPrice = computed(() => props.cart.reduce((sum, item) => sum + item.price * item.quantity, 0))
+const totalItems = computed(() => store.cart.reduce((sum, item) => sum + item.quantity, 0))
+const totalPrice = computed(() => store.cart.reduce((sum, item) => sum + item.price * item.quantity, 0))
 
 const processPayment = () => {
+  if (store.cart.length === 0) return
+  store.processCheckout()
   isPaid.value = true
 }
 
 const finishCheckout = () => {
-  emit('clear-cart')
   isPaid.value = false
-  router.push({ name: 'home' })
+  router.push({ name: 'orders' })
 }
 </script>
