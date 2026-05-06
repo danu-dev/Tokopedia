@@ -19,7 +19,7 @@
       @decrease="decreaseCartQuantity"
     />
 
-    <AppToast :show="isToastShow" :message="toastMsg" />
+    <AppToast :show="store.toast.show" :message="store.toast.message" />
 
     <AppModal :show="isAuthModalOpen" @close="isAuthModalOpen = false">
       <template #title>{{ authMode === 'login' ? 'Masuk' : 'Daftar' }}</template>
@@ -109,7 +109,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { RouterView } from 'vue-router'
 import { store } from './store'
 import TheNavbar from './components/layout/TheNavbar.vue'
@@ -126,26 +126,10 @@ const isAuthModalOpen = ref(false)
 const authMode = ref('login')
 const authIdentifier = ref('')
 const authContact = ref('')
-const isToastShow = ref(false)
-const toastMsg = ref('')
-let toastTimer = null
 
 const cartCount = computed(() => {
   return store.cart.reduce((total, item) => total + item.quantity, 0)
 })
-
-const showToast = (message) => {
-  toastMsg.value = message
-  isToastShow.value = true
-
-  if (toastTimer) {
-    clearTimeout(toastTimer)
-  }
-
-  toastTimer = setTimeout(() => {
-    isToastShow.value = false
-  }, 3000)
-}
 
 const openAuthModal = (mode) => {
   authMode.value = mode
@@ -159,7 +143,7 @@ const handleLogin = () => {
   const name = identifier ? identifier.split('@')[0] : store.user.name
   store.login(name)
   isAuthModalOpen.value = false
-  showToast('Selamat datang kembali!')
+  store.showToast('Selamat datang kembali!')
 }
 
 const handleRegister = () => {
@@ -167,12 +151,12 @@ const handleRegister = () => {
   const fallbackName = authContact.value.trim()
   store.login(fullName || fallbackName.split('@')[0])
   isAuthModalOpen.value = false
-  showToast('Akun berhasil dibuat. Selamat datang!')
+  store.showToast('Akun berhasil dibuat. Selamat datang!')
 }
 
 const handleAddToCart = (product) => {
   store.addToCart(product)
-  showToast(`${product.title} masuk keranjang.`)
+  store.showToast(`${product.title} masuk keranjang.`)
 }
 
 const removeFromCart = (index) => {
@@ -190,12 +174,6 @@ const decreaseCartQuantity = (index) => {
 const clearCart = () => {
   store.clearCart()
 }
-
-onBeforeUnmount(() => {
-  if (toastTimer) {
-    clearTimeout(toastTimer)
-  }
-})
 </script>
 
 <style>

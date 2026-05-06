@@ -1,13 +1,13 @@
 <template>
-  <main class="max-w-7xl mx-auto px-4 pb-20">
+  <main class="mx-auto max-w-7xl px-4 pb-24 md:pb-20">
     <TheHero />
 
-    <section class="mt-8 pb-4">
-      <div class="flex justify-between gap-4 overflow-x-auto no-scrollbar">
+    <section class="mt-4 pb-4 md:mt-8">
+      <div class="-mx-4 flex gap-4 overflow-x-auto px-4 no-scrollbar md:mx-0 md:justify-between md:px-0">
         <div
           v-for="cat in quickLinks"
           :key="cat.name"
-          class="group flex min-w-[80px] cursor-pointer flex-col items-center"
+          class="group flex min-w-[72px] cursor-pointer flex-col items-center md:min-w-[96px]"
           @click="handleQuickLink(cat)"
         >
           <div
@@ -35,9 +35,23 @@
       </div>
     </section>
 
-    <section ref="productSectionRef" class="my-10">
+    <section ref="productSectionRef" class="my-8 md:my-10">
       <div class="flex flex-col gap-6">
-        <h2 class="text-xl font-bold text-gray-800">Rekomendasi Untukmu</h2>
+        <div class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+          <h2 class="text-xl font-bold text-gray-800">Rekomendasi Untukmu</h2>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-medium text-gray-400">Urutkan:</span>
+            <select
+              v-model="sortBy"
+              class="cursor-pointer rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-bold text-gray-700 outline-none focus:border-[#00AA5B]"
+            >
+              <option value="default">Paling Sesuai</option>
+              <option value="price-low">Harga Terendah</option>
+              <option value="price-high">Harga Tertinggi</option>
+              <option value="rating">Rating Tertinggi</option>
+            </select>
+          </div>
+        </div>
 
         <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2">
           <AppButton
@@ -53,13 +67,13 @@
       </div>
     </section>
 
-    <div v-if="isLoading" class="grid grid-cols-2 gap-6 md:grid-cols-4 lg:grid-cols-6">
+    <div v-if="isLoading" class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-6 lg:grid-cols-6">
       <AppSkeleton v-for="item in 12" :key="item" />
     </div>
 
-    <div v-else-if="filteredProducts.length > 0" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+    <div v-else-if="visibleProducts.length > 0" class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-6 lg:grid-cols-6">
       <ProductCard
-        v-for="product in filteredProducts"
+        v-for="product in visibleProducts"
         :key="product.id"
         v-bind="product"
         @open-detail="goToDetail(product.id)"
@@ -67,11 +81,20 @@
       />
     </div>
 
-    <div v-else class="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm">
+    <div v-if="!isLoading && hasMore && visibleProducts.length > 0" class="mt-10 flex justify-center md:mt-12">
+      <button
+        class="rounded-xl border-2 border-[#00AA5B] px-8 py-3 text-sm font-bold text-[#00AA5B] transition-all hover:bg-green-50 active:scale-95 md:px-10"
+        @click="loadMore"
+      >
+        Muat Lebih Banyak
+      </button>
+    </div>
+
+    <div v-if="!isLoading && visibleProducts.length === 0" class="rounded-3xl border border-dashed border-gray-200 bg-white py-20 text-center shadow-sm">
       <p class="text-gray-400 font-medium">
         {{
-          searchQuery
-            ? `Yah, produk \"${searchQuery}\" tidak ditemukan di kategori ini.`
+          props.searchQuery
+            ? `Yah, produk \"${props.searchQuery}\" tidak ditemukan di kategori ini.`
             : 'Wah, produk di kategori ini belum tersedia.'
         }}
       </p>
@@ -108,7 +131,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   BoltIcon,
@@ -140,9 +163,12 @@ const emit = defineEmits(['add-to-cart', 'clear-search'])
 const router = useRouter()
 const categories = ['Semua', 'Gadget', 'Komputer', 'Elektronik', 'Kecantikan', 'Fashion Pria', 'Promo Hari Ini']
 const selectedCategory = ref('Semua')
+const sortBy = ref('default')
 const isTopUpOpen = ref(false)
 const productSectionRef = ref(null)
 const isLoading = ref(true)
+const itemsPerLoad = 6
+const itemsToShow = ref(itemsPerLoad)
 let loadingTimer = null
 
 const quickLinks = [
@@ -153,8 +179,8 @@ const quickLinks = [
   { name: 'Fashion Pria', icon: ShoppingBagIcon, type: 'filter' }
 ]
 
-const filteredProducts = computed(() => {
-  return productData.filter((product) => {
+const allFilteredProducts = computed(() => {
+  const products = productData.filter((product) => {
     let matchCategory = selectedCategory.value === 'Semua' || product.category === selectedCategory.value
 
     if (selectedCategory.value === 'Elektronik') {
@@ -169,6 +195,24 @@ const filteredProducts = computed(() => {
 
     return matchCategory && matchSearch
   })
+
+  if (sortBy.value === 'price-low') {
+    products.sort((a, b) => a.price - b.price)
+  } else if (sortBy.value === 'price-high') {
+    products.sort((a, b) => b.price - a.price)
+  } else if (sortBy.value === 'rating') {
+    products.sort((a, b) => b.rating - a.rating)
+  }
+
+  return products
+})
+
+const visibleProducts = computed(() => {
+  return allFilteredProducts.value.slice(0, itemsToShow.value)
+})
+
+const hasMore = computed(() => {
+  return itemsToShow.value < allFilteredProducts.value.length
 })
 
 const goToDetail = (id) => {
@@ -197,6 +241,17 @@ const handleQuickLink = (quickLink) => {
   setSelectedCategory(quickLink.name)
   scrollToProducts()
 }
+
+const loadMore = () => {
+  itemsToShow.value += itemsPerLoad
+}
+
+watch(
+  [selectedCategory, () => props.searchQuery, sortBy],
+  () => {
+    itemsToShow.value = itemsPerLoad
+  }
+)
 
 onMounted(() => {
   loadingTimer = setTimeout(() => {

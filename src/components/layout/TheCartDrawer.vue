@@ -60,7 +60,7 @@
           class="w-full py-3.5 text-base shadow-xl shadow-green-600/20"
           @click="goToCheckout"
         >
-          Beli Sekarang
+          Beli Sekarang ({{ items.length }})
         </AppButton>
       </div>
     </div>
@@ -81,6 +81,7 @@ const totalItems = computed(() => props.items.reduce((sum, item) => sum + item.q
 const totalPrice = computed(() => props.items.reduce((sum, item) => sum + (item.price * item.quantity), 0))
 
 const goToCheckout = () => {
+  if (props.items.length === 0) return
   emit('close')
   router.push({ name: 'checkout' })
 }

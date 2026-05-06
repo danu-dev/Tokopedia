@@ -16,12 +16,31 @@ const readJSON = (key, fallback) => {
   }
 }
 
+let toastTimeoutId = null
+
 export const store = reactive({
   cart: readJSON('cart', []),
   wishlist: readJSON('wishlist', []),
   orders: readJSON('orders', []),
   isLoggedIn: readJSON('isLoggedIn', false),
   user: readJSON('user', defaultUser),
+  toast: {
+    show: false,
+    message: ''
+  },
+
+  showToast(message, duration = 2500) {
+    this.toast.message = message
+    this.toast.show = true
+
+    if (toastTimeoutId) {
+      clearTimeout(toastTimeoutId)
+    }
+
+    toastTimeoutId = setTimeout(() => {
+      this.toast.show = false
+    }, duration)
+  },
 
   isInWishlist(productId) {
     return this.wishlist.some((item) => item.id === productId)
@@ -32,8 +51,10 @@ export const store = reactive({
 
     if (targetIndex === -1) {
       this.wishlist.push(product)
+      this.showToast('Berhasil ditambah ke Wishlist')
     } else {
       this.wishlist.splice(targetIndex, 1)
+      this.showToast('Dihapus dari Wishlist')
     }
   },
 

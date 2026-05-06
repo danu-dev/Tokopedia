@@ -1,32 +1,20 @@
 [
-  {
-    "id": 1,
-    "title": "Logitech G Pro X Superlight Wireless",
-    "price": 2100000,
-    "location": "Jakarta Barat",
-    "rating": 4.9,
-    "sold": 2500,
-    "category": "Gadget",
-    "image": "https://picsum.photos/400/400?random=1"
-  },
-  {
-    "id": 2,
-    "title": "Monitor LG 24GN600 UltraGear 144Hz",
-    "price": 2450000,
-    "location": "Tangerang",
-    "rating": 5.0,
-    "sold": 800,
-    "category": "Komputer",
-    "image": "https://picsum.photos/400/400?random=2"
-  },
-  {
-    "id": 3,
-    "title": "Keychron K2 Mechanical Keyboard",
-    "price": 1250000,
-    "location": "Jakarta Pusat",
-    "rating": 4.8,
-    "sold": 1200,
-    "category": "Komputer",
-    "image": "https://picsum.photos/400/400?random=3"
-  }
+  { "id": 1, "title": "Logitech G Pro X Superlight Wireless", "price": 2100000, "location": "Jakarta Barat", "rating": 4.9, "sold": 2500, "category": "Gadget", "image": "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=400&auto=format&fit=crop" },
+  { "id": 2, "title": "Monitor LG 24GN600 UltraGear 144Hz", "price": 2450000, "location": "Tangerang", "rating": 5.0, "sold": 800, "category": "Komputer", "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=400&auto=format&fit=crop" },
+  { "id": 3, "title": "Keychron K2 Mechanical Keyboard", "price": 1250000, "location": "Jakarta Pusat", "rating": 4.8, "sold": 1200, "category": "Komputer", "image": "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?q=80&w=400&auto=format&fit=crop" },
+  { "id": 4, "title": "iPhone 15 Pro 256GB Titanium", "price": 18999000, "location": "Jakarta Selatan", "rating": 4.9, "sold": 500, "category": "Gadget", "image": "https://images.unsplash.com/photo-1696446701796-da61225697cc?q=80&w=400&auto=format&fit=crop" },
+  { "id": 5, "title": "Samsung Smart TV 43 Inch 4K", "price": 4200000, "location": "Bekasi", "rating": 4.7, "sold": 300, "category": "Elektronik", "image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=400&auto=format&fit=crop" },
+  { "id": 6, "title": "Skintific 5X Ceramide Moisturizer", "price": 135000, "location": "Surabaya", "rating": 4.9, "sold": 10000, "category": "Kecantikan", "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400&auto=format&fit=crop" },
+  { "id": 7, "title": "Kemeja Flanel Pria Premium", "price": 185000, "location": "Bandung", "rating": 4.6, "sold": 4500, "category": "Fashion Pria", "image": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=400&auto=format&fit=crop" },
+  { "id": 8, "title": "Xiaomi Mi Air Purifier 4 Lite", "price": 1600000, "location": "Jakarta Utara", "rating": 4.8, "sold": 900, "category": "Elektronik", "image": "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?q=80&w=400&auto=format&fit=crop" },
+  { "id": 9, "title": "Sony WH-1000XM5 Noise Cancelling", "price": 4500000, "location": "Jakarta Pusat", "rating": 4.9, "sold": 1500, "category": "Gadget", "image": "https://images.unsplash.com/photo-1613040819284-97f74111a3af?q=80&w=400&auto=format&fit=crop" },
+  { "id": 10, "title": "MacBook Air M2 13 Inch", "price": 15500000, "location": "Jakarta Selatan", "rating": 5.0, "sold": 400, "category": "Komputer", "image": "https://images.unsplash.com/photo-1517336714460-457228387ea4?q=80&w=400&auto=format&fit=crop" },
+  { "id": 11, "title": "Asus ROG Swift PG279QM", "price": 12000000, "location": "Tangerang", "rating": 4.8, "sold": 100, "category": "Komputer", "image": "https://images.unsplash.com/photo-1547119957-637f8679db1e?q=80&w=400&auto=format&fit=crop" },
+  { "id": 12, "title": "Dyson Supersonic Hair Dryer", "price": 7500000, "location": "Jakarta Barat", "rating": 4.9, "sold": 200, "category": "Elektronik", "image": "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?q=80&w=400&auto=format&fit=crop" },
+  { "id": 13, "title": "Sunscreen Azarine SPF 45", "price": 65000, "location": "Semarang", "rating": 4.8, "sold": 20000, "category": "Kecantikan", "image": "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400&auto=format&fit=crop" },
+  { "id": 14, "title": "Laneige Water Bank Blue Hyaluronic", "price": 450000, "location": "Jakarta Utara", "rating": 4.9, "sold": 3000, "category": "Kecantikan", "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=400&auto=format&fit=crop" },
+  { "id": 15, "title": "Sepatu Nike Air Jordan 1 Low", "price": 2500000, "location": "Jakarta Selatan", "rating": 4.7, "sold": 1200, "category": "Fashion Pria", "image": "https://images.unsplash.com/photo-1584735175315-9d5df23860e6?q=80&w=400&auto=format&fit=crop" },
+  { "id": 16, "title": "Jaket Parka Outdoor Waterproof", "price": 320000, "location": "Bandung", "rating": 4.5, "sold": 5000, "category": "Fashion Pria", "image": "https://images.unsplash.com/photo-1591047134402-2341234bb5bf?q=80&w=400&auto=format&fit=crop" },
+  { "id": 17, "title": "Razer DeathAdder V3 Pro", "price": 2300000, "location": "Surabaya", "rating": 4.9, "sold": 600, "category": "Gadget", "image": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?q=80&w=400&auto=format&fit=crop" },
+  { "id": 18, "title": "iPad Pro M2 11 Inch", "price": 14500000, "location": "Jakarta Barat", "rating": 5.0, "sold": 300, "category": "Gadget", "image": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?q=80&w=400&auto=format&fit=crop" }
 ]
