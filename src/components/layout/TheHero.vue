@@ -1,107 +1,91 @@
 <template>
-  <section class="relative mt-4 group md:mt-6">
-    <div class="relative h-[220px] overflow-hidden rounded-[20px] border border-gray-100 shadow-sm sm:h-[280px] md:h-[380px] md:rounded-[24px]">
+  <section class="relative mt-4 px-4 md:px-0">
+    <div class="relative h-[160px] sm:h-[240px] md:h-[350px] w-full rounded-[20px] md:rounded-[32px] overflow-hidden shadow-lg border border-gray-100">
 
-      <div
-        v-for="(banner, index) in banners"
-        :key="banner.id"
-        v-show="currentIndex === index"
-        :class="['absolute inset-0 flex h-full w-full items-center px-6 text-white transition-all duration-500 md:px-16', banner.bgClass]"
-      >
-        <div class="z-10 flex h-full max-w-[70%] flex-col justify-center py-4 md:max-w-xl">
-          <span class="mb-2 inline-block w-fit rounded-md bg-white/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md md:text-xs">
-            {{ banner.tag }}
-          </span>
+      <transition name="fade" mode="out-in">
+        <div
+          :key="currentIndex"
+          :class="['absolute inset-0 flex items-center px-6 md:px-20 text-white transition-all duration-700', banners[currentIndex].bgClass]"
+        >
+          <div class="z-10 flex flex-col justify-center w-full max-w-[70%] md:max-w-xl text-left">
+            <span class="mb-1.5 w-fit rounded bg-black/10 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider backdrop-blur-md md:text-[10px]">
+              {{ banners[currentIndex].tag }}
+            </span>
 
-          <h2 class="mb-2 text-xl font-black leading-tight drop-shadow-md sm:text-3xl md:text-5xl">
-            {{ banner.title }}
-          </h2>
+            <h2 class="text-sm sm:text-xl md:text-4xl font-black leading-tight tracking-tight mb-1 md:mb-3">
+              <span>{{ banners[currentIndex].titleShort }}</span>
+              <span class="hidden md:inline">{{ banners[currentIndex].titleLong }}</span>
+            </h2>
 
-          <p class="mb-4 line-clamp-2 text-[10px] font-medium opacity-90 sm:text-sm md:mb-6 md:text-base md:line-clamp-none">
-            {{ banner.description }}
-          </p>
+            <p class="text-[9px] md:text-base font-medium opacity-70 line-clamp-1 md:line-clamp-none mb-3 md:mb-6 max-w-md">
+              {{ banners[currentIndex].description }}
+            </p>
 
-          <div v-if="currentIndex === 0" class="mt-1 mb-4 flex items-center gap-2 md:mb-6 md:gap-3">
-            <span class="text-[10px] font-bold uppercase tracking-widest opacity-80 md:text-xs">Berakhir dalam:</span>
-            <div class="flex gap-2">
-              <div
-                v-for="unit in countdownUnits"
-                :key="unit"
-                class="rounded-lg bg-white/20 px-2 py-0.5 font-mono text-sm font-bold backdrop-blur-md sm:px-3 sm:py-1 sm:text-base md:text-lg"
-              >
-                {{ unit }}
+            <div v-if="banners[currentIndex].id === 1" class="flex items-center gap-1.5 mb-4 md:mb-8">
+              <div class="flex gap-1">
+                <div v-for="(unit, i) in countdownUnits" :key="i" class="flex items-center">
+                  <span class="bg-white/20 rounded px-1.5 py-0.5 text-[9px] md:text-lg font-mono font-bold">
+                    {{ unit }}
+                  </span>
+                  <span v-if="i < 2" class="mx-0.5 opacity-30 text-[9px]">:</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div>
-            <AppButton variant="white" class="px-4 py-1.5 text-[10px] md:px-8 md:py-3 md:text-sm">
+            <button class="w-fit bg-white text-gray-900 px-4 py-1.5 md:px-10 md:py-3.5 rounded-lg md:rounded-2xl text-[9px] md:text-sm font-black shadow-sm active:scale-95 transition-all">
               Cek Sekarang
-            </AppButton>
+            </button>
+          </div>
+
+          <div class="absolute -right-4 -bottom-4 md:right-10 md:bottom-auto opacity-5 md:opacity-20 pointer-events-none rotate-12 transition-transform duration-1000 group-hover:scale-110">
+            <component :is="iconMap[banners[currentIndex].iconName]" class="h-32 w-32 md:h-[450px] md:w-[450px] stroke-[1px]" />
           </div>
         </div>
-
-        <div class="pointer-events-none absolute -right-10 -bottom-10 opacity-30 md:opacity-20">
-          <component
-            :is="iconMap[banner.iconName]"
-            class="h-48 w-48 text-white sm:h-72 sm:w-72 md:h-[500px] md:w-[500px]"
-          />
-        </div>
-      </div>
-
-      <div class="absolute bottom-4 left-6 flex gap-1.5 md:left-16 md:gap-2">
-        <div
-          v-for="(_, i) in banners"
-          :key="i"
-          :class="['h-1 rounded-full transition-all duration-300 md:h-1.5', currentIndex === i ? 'w-6 bg-white md:w-8' : 'w-1 bg-white/40 md:w-1.5']"
-        ></div>
-      </div>
+      </transition>
     </div>
   </section>
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { GiftIcon, SparklesIcon, TicketIcon } from '@heroicons/vue/24/outline'
+
+// IMPORT DATA DARI FILE JSON
 import bannerData from '../../data/banners.json'
 
-// 1. Impor komponen AppButton agar bisa digunakan
-import AppButton from '../ui/AppButton.vue'
-
 const iconMap = { GiftIcon, SparklesIcon, TicketIcon }
-const banners = ref(bannerData)
+const banners = ref(bannerData) // Gunakan data dari file JSON
 const currentIndex = ref(0)
-const countdownInSeconds = ref(2 * 3600 + 45 * 60 + 12)
+const countdownInSeconds = ref(7200)
 let slideTimer = null
 let countdownTimer = null
 
-const nextSlide = () => {
-  currentIndex.value = (currentIndex.value + 1) % banners.value.length
-}
-
 const countdownUnits = computed(() => {
-  const hours = Math.floor(countdownInSeconds.value / 3600)
-  const minutes = Math.floor((countdownInSeconds.value % 3600) / 60)
-  const seconds = countdownInSeconds.value % 60
-
-  return [
-    String(hours).padStart(2, '0'),
-    String(minutes).padStart(2, '0'),
-    String(seconds).padStart(2, '0')
-  ]
+  const h = Math.floor(countdownInSeconds.value / 3600)
+  const m = Math.floor((countdownInSeconds.value % 3600) / 60)
+  const s = countdownInSeconds.value % 60
+  return [String(h).padStart(2, '0'), String(m).padStart(2, '0'), String(s).padStart(2, '0')]
 })
 
 onMounted(() => {
-  slideTimer = setInterval(nextSlide, 3000)
+  // Timer ganti slide
+  slideTimer = setInterval(() => {
+    currentIndex.value = (currentIndex.value + 1) % banners.value.length
+  }, 5000)
+
+  // Timer countdown
   countdownTimer = setInterval(() => {
-    if (countdownInSeconds.value > 0) {
-      countdownInSeconds.value -= 1
-    }
+    if (countdownInSeconds.value > 0) countdownInSeconds.value--
   }, 1000)
 })
 
 onUnmounted(() => {
-  if (slideTimer) clearInterval(slideTimer)
-  if (countdownTimer) clearInterval(countdownTimer)
+  clearInterval(slideTimer)
+  clearInterval(countdownTimer)
 })
 </script>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+</style>
